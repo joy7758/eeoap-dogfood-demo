@@ -23,6 +23,7 @@
 - `docs/protocol/`
 - `docs/CLAIM_SCOPE.md`
 - `docs/QUICKSTART_FOR_AGENTS.md`
+- `schema/execution-evidence-operation-accountability-profile-v0.1.schema.json`
 - `reports/eeoap-test-branch-local-validation.md`
 - `reports/eeoap-test-branch-task-summary.md`
 
@@ -33,7 +34,7 @@
 - `python -m json.tool protocol/clause-index.json`
 - `python scripts/check_protocol_citations.py`
 - `python scripts/check_protocol_citations.py --manifest protocol/manifest.json --clause-index protocol/clause-index.json --clauses-md docs/protocol/clauses.md --pr-template .github/pull_request_template.md --root .`
-- `agent-evidence validate-profile examples/minimal-valid-evidence.json`
+- `agent-evidence validate-profile --schema schema/execution-evidence-operation-accountability-profile-v0.1.schema.json examples/minimal-valid-evidence.json`
 - `python -m pytest tests`
 - Negative controls for invalid clause id, missing related file, and schema
   violation.
@@ -47,6 +48,8 @@
 - Validator smoke test: PASS.
 - Candidate package tests: PASS.
 - Negative controls: PASS, expected failures observed.
+- Remote-install friction found and fixed by adding a repository-local schema
+  file and using explicit `--schema`.
 
 ## Known Deviations
 

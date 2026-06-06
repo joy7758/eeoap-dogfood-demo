@@ -37,6 +37,7 @@ jobs:
               "docs/protocol/citation-guide.md",
               "protocol/manifest.json",
               "protocol/clause-index.json",
+              "schema/execution-evidence-operation-accountability-profile-v0.1.schema.json",
               ".agents/skills/eeoap-evidence-gate/SKILL.md",
               ".agents/skills/eeoap-evidence-gate/README.md",
           ]
@@ -74,4 +75,4 @@ jobs:
           python -m json.tool protocol/manifest.json > /dev/null
           python -m json.tool protocol/clause-index.json > /dev/null
           python scripts/check_protocol_citations.py
-          agent-evidence validate-profile examples/minimal-valid-evidence.json
+          agent-evidence validate-profile --schema schema/execution-evidence-operation-accountability-profile-v0.1.schema.json examples/minimal-valid-evidence.json

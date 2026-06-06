@@ -25,7 +25,7 @@ implemented CLI surface before adding wrappers or new callable metadata.
 ## Validate the minimal example
 
 ```bash
-.venv/bin/agent-evidence validate-profile examples/minimal-valid-evidence.json
+.venv/bin/agent-evidence validate-profile --schema schema/execution-evidence-operation-accountability-profile-v0.1.schema.json examples/minimal-valid-evidence.json
 ```
 
 Expected behavior:

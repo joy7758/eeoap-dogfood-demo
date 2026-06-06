@@ -39,4 +39,4 @@ jobs:
         run: python scripts/check_protocol_citations.py
 
       - name: Run minimal evidence profile validation
-        run: agent-evidence validate-profile examples/minimal-valid-evidence.json
+        run: agent-evidence validate-profile --schema schema/execution-evidence-operation-accountability-profile-v0.1.schema.json examples/minimal-valid-evidence.json

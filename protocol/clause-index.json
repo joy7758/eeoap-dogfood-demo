@@ -22,7 +22,7 @@
                 "timestamp"
             ],
             "related_files": [
-                "docs/protocol/clauses.md",
+                "schema/execution-evidence-operation-accountability-profile-v0.1.schema.json",
                 "examples/minimal-valid-evidence.json"
             ],
       "validator_surface": "schema",
@@ -37,7 +37,7 @@
         "provenance"
             ],
             "related_files": [
-                "docs/protocol/clauses.md",
+                "schema/execution-evidence-operation-accountability-profile-v0.1.schema.json",
                 "examples/minimal-valid-evidence.json"
             ],
       "validator_surface": "references_and_consistency",

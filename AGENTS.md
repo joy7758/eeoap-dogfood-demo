@@ -21,7 +21,7 @@ validator:
 python -m json.tool protocol/manifest.json
 python -m json.tool protocol/clause-index.json
 python scripts/check_protocol_citations.py
-agent-evidence validate-profile examples/minimal-valid-evidence.json
+agent-evidence validate-profile --schema schema/execution-evidence-operation-accountability-profile-v0.1.schema.json examples/minimal-valid-evidence.json
 ```
 
 Do not claim certification, standardization, legal compliance, production
