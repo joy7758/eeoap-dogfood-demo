@@ -1,0 +1,42 @@
+name: EEOAP Protocol Gate
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  eeoap-protocol-gate:
+    name: eeoap-protocol-gate
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install package and EEOAP validator
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e .
+          python -m pip install "git+https://github.com/joy7758/agent-evidence.git@807d2c0d86ed9e28002126983a2b676442bc8166"
+
+      - name: Validate protocol metadata
+        run: |
+          python -m json.tool protocol/manifest.json > /dev/null
+          python -m json.tool protocol/clause-index.json > /dev/null
+
+      - name: Run protocol citation checker
+        run: python scripts/check_protocol_citations.py
+
+      - name: Run minimal evidence profile validation
+        run: agent-evidence validate-profile examples/minimal-valid-evidence.json
