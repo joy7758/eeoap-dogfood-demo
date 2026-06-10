@@ -1,0 +1,78 @@
+name: Validate agent-native metadata
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-agent-native-metadata:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Validate candidate EEOAP metadata
+        run: |
+          python - <<'PY'
+          import pathlib
+
+          root = pathlib.Path(".")
+          required = [
+              "AGENTS.md",
+              "EEOAP_PILOT_NOTES.md",
+              "docs/CLAIM_SCOPE.md",
+              "docs/QUICKSTART_FOR_AGENTS.md",
+              "docs/protocol/profile.md",
+              "docs/protocol/clauses.md",
+              "docs/protocol/citation-guide.md",
+              "protocol/manifest.json",
+              "protocol/clause-index.json",
+              "schema/execution-evidence-operation-accountability-profile-v0.1.schema.json",
+              ".agents/skills/eeoap-evidence-gate/SKILL.md",
+              ".agents/skills/eeoap-evidence-gate/README.md",
+          ]
+          for item in required:
+              if not (root / item).exists():
+                  raise AssertionError(f"missing required EEOAP test asset: {item}")
+
+          text = "\n".join(
+              (root / item).read_text(encoding="utf-8").lower()
+              for item in ["AGENTS.md", "EEOAP_PILOT_NOTES.md", "README.md"]
+          )
+          required_boundaries = [
+              "does not install eeoap",
+              "test branch",
+              "do not claim certification",
+              "production readiness",
+              "commercial readiness",
+              "external validation",
+          ]
+          for phrase in required_boundaries:
+              if phrase not in text:
+                  raise AssertionError(f"missing boundary phrase: {phrase}")
+
+          print("candidate EEOAP metadata checks ok")
+          PY
+
+      - name: Install package and EEOAP validator
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e .
+          python -m pip install "git+https://github.com/joy7758/agent-evidence.git@807d2c0d86ed9e28002126983a2b676442bc8166"
+
+      - name: Validate EEOAP protocol gate
+        run: |
+          python -m json.tool protocol/manifest.json > /dev/null
+          python -m json.tool protocol/clause-index.json > /dev/null
+          python scripts/check_protocol_citations.py
+          agent-evidence validate-profile --schema schema/execution-evidence-operation-accountability-profile-v0.1.schema.json examples/minimal-valid-evidence.json
